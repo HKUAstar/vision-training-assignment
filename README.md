@@ -1,21 +1,35 @@
-# Vision training assignments
+# lyf 的第三次求助
 
-## Detection
+[中文](README.md) · [English](README.en.md)
 
-Run a supplied armor detector on competition video, solve PnP, and export detections and
-3D corners as JSON Lines. Use any language; Python, C++, and Rust are recommended.
+## 云台能动了，然后呢？
 
-Start with the [detection assignment](detection/README.md). The directory includes the model,
-two short videos, and camera calibration.
+在[控制组的作业](https://github.com/HKUAstar/control-training-template)中，
+lyf 把 yaw、pitch 云台教具交给了控制组。这次我们假设他们已经完成程序：
+云台可以回正、跟随目标角度，也能在调试时停止输出。
 
-## Aiming
+lyf 看着终于不再反复点头的云台，松了一口气：“现在能不能让它自己看着目标转？”
 
-Predict and intercept armor plates on a translating, spinning target using Rust.
-The simulator provides delayed target observations, a 3D viewer, and MCAP recording/replay.
+控制组也想试试。他们把目标角度接口留了出来，准备接上视觉系统。
+但摆在视觉组面前的还有两件事：相机画面里的哪一块是装甲板？
+就算知道它现在在哪里，等弹丸飞过去，它又会转到哪里？
 
-Start with the [aiming assignment](aiming/README.md). Implement `aim` in
-[aiming/src/lib.rs](aiming/src/lib.rs).
+这一次，你负责补上视觉链路中的一段。为了能在自己的电脑上独立完成，
+我们提供录像、模型、标定和瞄准仿真器。本次不需要真实教具、相机、电机或控制板，
+也不要求与控制组固件通信。故事中的联调是背景，不是额外的硬件任务。
 
-```sh
-cargo run --manifest-path aiming/Cargo.toml --locked
-```
+## 两条路线，任选其一
+
+**只需完成检测或瞄准中的一项，不要求两项都做。两条路线互不依赖。**
+
+| 路线 | 你负责什么 | 已提供什么 | 从哪里开始 |
+| --- | --- | --- | --- |
+| 检测 | 从视频检测装甲板，用 PnP 恢复三维角点，导出 JSONL | 预训练模型、比赛片段、相机标定 | [detection/README.md](detection/README.md) |
+| 瞄准 | 根据延迟目标模型预测装甲板位置，决定瞄准角和开火时机 | 精确的历史观测、弹道工具、3D 仿真、MCAP 回放 | [aiming/README.md](aiming/README.md) |
+
+检测路线语言不限，推荐 Python、C++ 或 Rust，不需要训练模型。
+瞄准路线使用 Rust，不需要实现检测、跟踪器或状态估计。
+两者都允许使用参考资料和 AI 工具，但你需要能够解释自己的实现并定位问题。
+
+选择路线后，按对应 README 准备环境、完成程序并整理提交内容。
+提交自己的代码仓库链接，附上该路线要求的运行说明和结果即可。
