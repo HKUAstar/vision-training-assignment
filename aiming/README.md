@@ -12,7 +12,7 @@
 但观测描述的是过去的状态。你需要预测弹丸到达时装甲板的位置。
 
 只需修改 [src/lib.rs](src/lib.rs)，其中包含 `aim` 和相关的类型定义。
-绘图接口位于 [src/ui.rs](src/ui.rs)。`src/sim/` 包含评分、界面和 MCAP 功能，请勿修改。
+绘图接口位于 [src/ui.rs](src/ui.rs)。`src/sim/` 包含仿真、界面和 MCAP 功能，请勿修改。
 模板默认不开火，并在 `aim` 中提供可以自行修改的装甲板绘图和命中计数示例。
 
 ## 参考效果
@@ -26,45 +26,11 @@ https://github.com/user-attachments/assets/2a08b028-4c0a-400b-9102-b1cc2989b7e8
 ## 环境与硬件
 
 - 安装 [Rust / rustup](https://www.rust-lang.org/tools/install)，Rust 版本至少为 **1.98.1**。
-  首次构建需要联网下载依赖。本次验证使用 rustc 1.99.1。
-- 还需要本机 C/C++ 编译器和链接器。macOS 使用 Xcode Command Line Tools；
+- 需要本机 C/C++ 编译器和链接器。macOS 使用 Xcode Command Line Tools；
   Windows 使用 MSVC C++ Build Tools；Linux 需要编译工具和窗口后端的开发库。
-- 3D 界面需要桌面会话，以及支持 wgpu 的图形驱动，例如 Metal、Vulkan 或 DX12。
-  不需要 CUDA 或独立显卡；本次使用 Apple 集成 GPU 验证。
-- 建议至少有 **8 GB 内存，16 GB 更宽裕**，并预留 **5 GB 磁盘空间**用于依赖和构建。
-  这是使用建议，不是已验证的最低配置。4K 视频导出、长录制和更多并行编译会增加资源需求。
-- 只有导出 MP4 才需要 `ffmpeg`。普通界面、离线评测和 MCAP 不需要它。
-
-内存较少时，可以限制为两个编译任务，并使用与下面测量相同的 release 构建：
-
-```sh
-cargo build --release --locked --jobs 2
-cargo run --release --locked --jobs 2 -- --config scenarios/moving.json
-```
-
-没有可用图形环境时，可以不编译界面，离线运行并输出 MCAP。文件名需要是尚不存在的新路径：
-
-```sh
-cargo run --no-default-features --locked --jobs 2 -- --offline --record target/headless.mcap
-```
-
-### 本次实测
-
-测量于 2026-10-28，机器为 Apple M5 Max、128 GiB 统一内存、macOS 27.0.1（arm64），
-工具链为 rustc 1.99.1。运行的是默认学生模板，没有加入完整瞄准解答。
-
-| 项目 | 实测值 | 条件 |
-| --- | --- | --- |
-| release 构建峰值 | 1,198 MiB（约 1.17 GiB） | `cargo build --release --locked --jobs 2` 的进程树 RSS 之和 |
-| 3D 界面峰值 | 161 MiB RSS | release 二进制、`scenarios/moving.json`、默认暂停状态打开 35 秒 |
-| 离线仿真峰值 | 15 MiB RSS | 同一 release 二进制，完成默认 20 秒任务并将完整过程写入 MCAP |
-
-构建时部分依赖命中缓存，**不是无缓存全量构建的峰值**。
-构建进程树每 0.1 秒采样一次，不包括监测程序或独立缓存服务；采样可能漏掉短暂峰值。
-运行峰值使用进程退出时的 macOS `ru_maxrss`，界面使用默认窗口及 1920 × 1100 场景缓冲。
-界面测量是暂停状态的基线；离线测量运行了完整仿真，但没有图形渲染。
-RSS 不等于完整 GPU/驱动内存，也不代表整机内存需求。其他操作系统、无缓存构建、
-debug 构建和 4K 导出的资源需求没有在本次测量中验证。
+- 3D 界面需要桌面环境和支持 wgpu 的图形驱动，例如 Metal、Vulkan 或 DX12，不需要独立显卡。
+- 编译约需 **1 GB 内存**，运行约需 **150 MB 内存**，实际用量因环境而异。
+- 只有导出 MP4 才需要 `ffmpeg`。
 
 ## 运行
 
@@ -101,7 +67,7 @@ pub fn aim(input: &Input, debug: &mut Gizmos) -> Option<Command>
 ## 固定物理参数
 
 所有发射物理量和时序都在 [src/lib.rs](src/lib.rs) 的 `physics` 中定义为常量。
-`Input` 和场景 JSON 不含可配置物理参数。弹道工具、绘图、界面和评分统一使用这些常量：
+`Input` 和场景 JSON 不含可配置物理参数。弹道工具、绘图、界面和仿真统一使用这些常量：
 
 | 常量 | 数值 |
 | --- | --- |
@@ -236,7 +202,7 @@ debug.overlay("Flight", format!("{:.0} ms", trajectory.flight_time_s * 1000.0));
 
 `debug.trajectory()` 自动采样炮口到命中时刻的抛物线，不需要自己写绘图循环。
 `debug.plate()` 画计分矩形和外法线，不添加标签；需要文字标记时使用 `debug.point()`。
-工具会忽略非有限坐标并限制绘图数量，调试输出不影响评分。
+工具会忽略非有限坐标并限制绘图数量。
 
 左键拖动环绕视角；右键、中键或 Shift+左键拖动平移；滚轮缩放。
 底部工具栏支持播放/暂停、单步、重置、时间轴和显示/隐藏叠加信息。
@@ -275,17 +241,4 @@ cargo run --locked -- --replay target/run.mcap --export-video target/run.mp4
 - [弹道解算及云台角度求解算法](https://bbs.herkules.dev/articles/01M2N3NVQSC21BAGE585ZF8DY1)：
   介绍带二次空气阻力的弹道与云台角度求解。
 
-这些是基础作业以外的扩展。评分器的真值遵循上面的仅重力抛物线，模型更复杂不一定更适合本题。
-
-## 提交与检查
-
-提交自己的代码仓库链接、运行方式和简要思路，并用录制或效果说明展示静止、自旋、平移加自旋三种场景。
-解释延迟如何相加、如何选择装甲板，以及何时开火。只选择本路线时不需要提交检测结果。
-
-```sh
-cargo fmt -- --check
-cargo clippy --all-targets --all-features --locked -- -D warnings
-cargo test --all-targets --locked
-cargo test --no-default-features --locked
-cargo doc --no-deps --locked
-```
+这些是基础作业以外的扩展。仿真使用上面的仅重力抛物线，不需要更复杂的弹道模型。

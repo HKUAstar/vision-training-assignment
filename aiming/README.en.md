@@ -26,49 +26,13 @@ trajectory. Use it as a visual reference while implementing your own solution.
 ## Setup and hardware
 
 - Install [Rust / rustup](https://www.rust-lang.org/tools/install), **Rust 1.98.1 or newer**.
-  The first build needs internet access to download dependencies. This session used rustc 1.99.1.
 - Install a native C/C++ compiler and linker: Xcode Command Line Tools on macOS,
   MSVC C++ Build Tools on Windows, or build tools and window-backend development libraries on Linux.
 - The 3D viewer needs a desktop session and a wgpu-compatible graphics driver, such as Metal,
-  Vulkan, or DX12. CUDA and a discrete GPU are unnecessary; this run used Apple integrated graphics.
-- Plan for **8 GB RAM or more; 16 GB gives more room**, and **5 GB free disk space**
-  for dependencies and build outputs. These are recommendations, not tested minimums.
-  4K export, long recordings, and more parallel compiler jobs can use additional resources.
-- `ffmpeg` is needed only for MP4 export. The viewer, offline evaluation, and MCAP do not need it.
-
-To limit concurrent compilation, use two jobs. These commands use the measured release profile:
-
-```sh
-cargo build --release --locked --jobs 2
-cargo run --release --locked --jobs 2 -- --config scenarios/moving.json
-```
-
-Without a graphics environment, omit the viewer and run offline to MCAP. Use a new output path;
-recordings do not overwrite existing files:
-
-```sh
-cargo run --no-default-features --locked --jobs 2 -- --offline --record target/headless.mcap
-```
-
-### Measurements from this session
-
-Measured on 2026-10-28: Apple M5 Max, 128 GiB unified memory, macOS 27.0.1 (arm64), rustc 1.99.1.
-The program used the default student template, without a completed aiming solution.
-
-| Workload | Measured peak | Conditions |
-| --- | --- | --- |
-| Release build | 1,198 MiB (about 1.17 GiB) | Sum of process-tree RSS for `cargo build --release --locked --jobs 2` |
-| 3D viewer | 161 MiB RSS | Release binary, `scenarios/moving.json`, open and paused for 35 seconds |
-| Offline simulation | 15 MiB RSS | Same release binary, full default 20-second task and MCAP recording |
-
-The build ran through the local mbx wrapper and reused some cached dependencies. It is **not a
-measurement of a fully uncached build**. Build-process RSS was sampled every 0.1 seconds, excluding
-this monitor and any separate cache service; sampling can miss short peaks. Viewer peak RSS comes
-from macOS `ru_maxrss` at process exit, using the default window and 1920 × 1100 scene buffer.
-The viewer measurement is a paused baseline; the offline run executes the full simulation without
-graphics rendering.
-RSS does not include all GPU/driver allocations and is not the whole computer's RAM requirement.
-Other operating systems, uncached builds, debug builds, and 4K exports were not measured here.
+  Vulkan, or DX12. A discrete GPU is unnecessary.
+- Allow approximately **1 GB RAM for compilation** and **150 MB RAM at runtime**.
+  Actual usage varies by environment.
+- `ffmpeg` is needed only for MP4 export.
 
 ## Run
 
@@ -254,7 +218,6 @@ debug.overlay("Flight", format!("{:.0} ms", trajectory.flight_time_s * 1000.0));
 `debug.trajectory()` samples the parabola from muzzle to flight time; no drawing loop is needed.
 `debug.plate()` draws a scoring rectangle and outward normal without a label. Use `debug.point()`
 to add a labeled marker when needed. Helpers ignore nonfinite coordinates and bound drawing counts.
-Diagnostic output does not affect scoring.
 
 Left-drag orbits; right/middle-drag or Shift-left-drag pans; scroll zooms. The bottom toolbar
 provides Play/Pause, Step, Reset, timeline seeking and overlay visibility. Tools contains scenarios,
@@ -294,19 +257,5 @@ Armor artwork uses the existing pattern from the vision simulator.
 - [弹道解算及云台角度求解算法](https://bbs.herkules.dev/articles/01M2N3NVQSC21BAGE585ZF8DY1)
   discusses ballistic and gimbal-angle solving with quadratic air resistance.
 
-These offer extensions beyond the basic assignment. A more realistic model is not automatically
-better for this evaluator: its ground truth follows the gravity-only parabola above.
-
-## Submission and validation
-
-Submit your repository link, run instructions, a short explanation, and recordings or results
-showing stationary, spinning, and translating/spinning scenarios. Explain delay compensation,
-plate selection, and fire gating. You do not need detection outputs for this path.
-
-```sh
-cargo fmt -- --check
-cargo clippy --all-targets --all-features --locked -- -D warnings
-cargo test --all-targets --locked
-cargo test --no-default-features --locked
-cargo doc --no-deps --locked
-```
+These offer extensions beyond the basic assignment. The simulator uses the gravity-only parabola
+above; more complicated ballistic models are unnecessary.

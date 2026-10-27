@@ -163,15 +163,6 @@ PnP 返回旋转和平移，两者都要作用到每个物理角点，得到 `co
 
 不要硬编码这些视频中的检测结果、帧范围、颜色或装甲板尺寸。
 
-## 提交
-
-提交源代码仓库、依赖和环境说明、运行命令，以及两份 JSONL 输出。
-简述预处理、解码、大小装甲板选择、PnP 和失败情况，说明如何检查角点顺序和坐标系。
-可选附上带标注的图片或视频，便于调试。只选择本路线时不需要提交瞄准代码。
-
-我们检查帧覆盖、模型调用、颜色和图案解码、重复抑制、坐标恢复、物理尺度和位姿合理性，
-也会检查你能否解释和调试结果。预训练模型会出错，不要求完美检测或稳定跟踪，不按速度评分。
-
 [model-repo]: https://github.com/broalantaps/RobotDetectionModel
 [inference-reference]: https://github.com/broalantaps/RobotDetectionModel/blob/babaebd6c8b3aeceda0ca924772b2d70d51801b4/OpenvinoInfer.cpp
 [pnp-docs]: https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html

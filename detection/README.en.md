@@ -170,19 +170,6 @@ Infinity. A frame without detections looks like this:
 
 Do not hard-code detections, frame ranges, colors, or armor sizes from these videos.
 
-## Submission
-
-Submit your source, dependency/setup instructions, the command to run it, and the two JSONL
-outputs. No aiming code is required for this path. Include a short explanation of preprocessing,
-decoding, armor-size selection, PnP, and any failure cases. Describe how you checked the corner
-order and coordinate frame.
-An annotated image or video is useful for debugging but optional.
-
-We assess correct frame coverage, model integration, color/pattern decoding, duplicate
-suppression, coordinate restoration, physical scale, and pose sanity. We also assess whether
-you can explain and debug the result. The pretrained model will make mistakes; perfect
-detection and stable tracking are not requirements. Runtime speed is not graded.
-
 [model-repo]: https://github.com/broalantaps/RobotDetectionModel
 [inference-reference]: https://github.com/broalantaps/RobotDetectionModel/blob/babaebd6c8b3aeceda0ca924772b2d70d51801b4/OpenvinoInfer.cpp
 [pnp-docs]: https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html

@@ -31,5 +31,9 @@ lyf 把 yaw、pitch 云台教具交给了控制组。这次我们假设他们已
 瞄准路线使用 Rust，不需要实现检测器、跟踪器或状态估计。
 两者都允许使用参考资料和 AI 工具，但你需要能够解释自己的实现并定位问题。
 
-选定路线后，按对应 README 准备环境、完成程序并整理提交内容：
-提交自己的代码仓库链接，附上该路线要求的运行说明和结果。
+## 开始与提交
+
+1. 打开[作业模板](https://github.com/HKUAstar/vision-training-assignment)，点击
+   **Use this template → Create a new repository**，在自己的账号下创建作业仓库。
+2. Clone 自己的仓库，选择检测或瞄准路线，按对应 README 完成作业。
+3. 将完成的代码 commit 并 push 到自己的仓库，然后提交该仓库的 **GitHub URL**。

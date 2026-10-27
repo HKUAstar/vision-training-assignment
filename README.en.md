@@ -37,5 +37,10 @@ is needed. Aiming uses Rust and requires no detector, tracker, or state estimato
 References and AI tools are allowed for either path, but you should be able to explain
 your implementation and debug its behavior.
 
-Choose a path and follow its README for setup, implementation, and deliverables.
-Submit your own repository link with the run instructions and results requested by that path.
+## Start and submit
+
+1. Open the [assignment template](https://github.com/HKUAstar/vision-training-assignment),
+   select **Use this template → Create a new repository**, and create a repository
+   under your account.
+2. Clone your repository, choose detection or aiming, and follow that path's README.
+3. Commit and push your completed code to your repository, then submit its **GitHub URL**.
