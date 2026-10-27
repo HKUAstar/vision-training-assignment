@@ -183,29 +183,6 @@ suppression, coordinate restoration, physical scale, and pose sanity. We also as
 you can explain and debug the result. The pretrained model will make mistakes; perfect
 detection and stable tracking are not requirements. Runtime speed is not graded.
 
-## Data provenance
-
-The videos are excerpts from `infantry__2026-05-31_13-30-35.avi` in the Herkules competition
-recordings. `large.mp4` uses source video time `[326, 338)` seconds and `small.mp4` uses
-`[414, 426)` seconds. They were encoded as H.264 at CRF 16 without cropping, resizing, or
-changing the 30 FPS playback rate. Playback timestamps are not measured camera capture times.
-
-The [recording collection][recordings] includes the
-[startup log][startup-log], which selects `./configs/infantry_2.yaml` for that session.
-The supplied calibration contains only the intrinsics and distortion from that collection's
-[infantry_2.yaml][source-config]. The calibration has not been independently remeasured for
-these excerpts, and the videos have no surveyed 3D ground truth. Low reprojection error
-alone does not prove accurate metric depth.
-
-`0526.onnx` is supplied unchanged. Its SHA-256 is:
-
-```text
-b53470b42a5778aca8f3382ebe3c623482599cbf8ebad2e9a0dcc0c7f42c9255
-```
-
 [model-repo]: https://github.com/broalantaps/RobotDetectionModel
 [inference-reference]: https://github.com/broalantaps/RobotDetectionModel/blob/babaebd6c8b3aeceda0ca924772b2d70d51801b4/OpenvinoInfer.cpp
 [pnp-docs]: https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html
-[recordings]: PRIVATE_SOURCE_REMOVED
-[startup-log]: PRIVATE_SOURCE_REMOVED
-[source-config]: PRIVATE_SOURCE_REMOVED

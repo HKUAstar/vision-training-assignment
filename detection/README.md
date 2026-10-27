@@ -172,28 +172,6 @@ PnP 返回旋转和平移，两者都要作用到每个物理角点，得到 `co
 我们检查帧覆盖、模型调用、颜色和图案解码、重复抑制、坐标恢复、物理尺度和位姿合理性，
 也会检查你能否解释和调试结果。预训练模型会出错，不要求完美检测或稳定跟踪，不按速度评分。
 
-## 数据来源
-
-视频截取自 Herkules 比赛录像 `infantry__2026-05-31_13-30-35.avi`。
-`large.mp4` 对应源视频 `[326, 338)` 秒，`small.mp4` 对应 `[414, 426)` 秒。
-使用 H.264、CRF 16 编码，没有裁剪或缩放，也没有改变 30 FPS 的帧率。
-播放时间戳并不等于相机的实际采集时间。
-
-[录像集合][recordings]中的[启动日志][startup-log]表明该次运行选择了
-`./configs/infantry_2.yaml`。提供的标定只保留集合中
-[infantry_2.yaml][source-config]的内参和畸变参数。
-我们没有为这些片段重新独立测量标定，也没有测量三维真值。
-仅凭较小的重投影误差不能证明深度尺度准确。
-
-`0526.onnx` 未经修改，其 SHA-256 为：
-
-```text
-b53470b42a5778aca8f3382ebe3c623482599cbf8ebad2e9a0dcc0c7f42c9255
-```
-
 [model-repo]: https://github.com/broalantaps/RobotDetectionModel
 [inference-reference]: https://github.com/broalantaps/RobotDetectionModel/blob/babaebd6c8b3aeceda0ca924772b2d70d51801b4/OpenvinoInfer.cpp
 [pnp-docs]: https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html
-[recordings]: PRIVATE_SOURCE_REMOVED
-[startup-log]: PRIVATE_SOURCE_REMOVED
-[source-config]: PRIVATE_SOURCE_REMOVED
