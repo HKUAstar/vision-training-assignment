@@ -10,7 +10,7 @@ The `aim` template holds fire and includes editable plate-drawing and hit-count 
 
 ## Reference
 
-[![Tracking reference](assets/tracking-reference.png)](assets/tracking-reference.mp4)
+https://github.com/user-attachments/assets/2a08b028-4c0a-400b-9102-b1cc2989b7e8
 
 [Watch the reference video](assets/tracking-reference.mp4) (4K, 60 FPS, 22 seconds).
 It shows a completed solution tracking and firing at a translating, spinning target.
